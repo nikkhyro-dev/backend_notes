@@ -282,7 +282,7 @@ db.<collection-name>.insertMany([doc,doc2 ,...])
 <p>When executing bulk write operation with unorderd flag . MongoDB processing after encountering an error.
 db.<collection-name>.insertMany([doc,doc2 ,...],{ordered : false});
 
-`if error accured all docs execute acept error docs.`
+`if error accured then all docs execute accept error docs.`
 </p>
 
 
