@@ -8,7 +8,7 @@
           >> Nested Blockquote
 Markup : ![picture alt](http://via.placeholder.com/200x150 "Title is optional") -->
 
-### Mongo BD Notes
+### Mongo DB Notes
 
 #### Basic -> Introduction to MongoDB , NO SQL V/s SQL , JSON V/s BSON, Mnaging DB & Collections ,Advanced CRUD Operations, Comparioson Operator, Cursor in MongoDB , Logical Operators , Sexpr & Elements Operator , Projection & RelationShip Embedded Documents .
 
@@ -125,6 +125,168 @@ MONOGODB store data in the form of document ( JSON ) it doesn't create any table
 
 ![ Server works](Screenshot%202023-08-20%20090956.png)
 
-  
+JSON V/S BSON
+ * In MongoDB ,we write in json formate only but behind the scene data stored in BSON (Binary JSON ) formate , binary represention of JSON.
+ * By utilizing BSON ,MongoDB can achieve higher read write speeds , reduced storage requirements ,and inproved data manipulaiton capabilties , maintaining performance efficiency .
 
-   
+
+ * json data 
+  ```
+ {"hello": "world"} → 
+
+\x16\x00\x00\x00           // total document size
+\x02                       // 0x02 = type String
+hello\x00                  // field name
+\x06\x00\x00\x00world\x00  // field value
+\x00   
+
+  ``` 
+
+# Reqirement to work with mongoDB 
+ 4 . ## Installation of MongoDB
+
+ * Installtion 
+    * [MongoDB Community Server Download INSTALL MSI ](https://www.mongodb.com/try/download/community)
+    * [MongoDB Shell Download install Msi ](https://www.mongodb.com/try/download/shell)
+    * [MongoDB Command Line Database Tools Download ](https://www.mongodb.com/try/download/shell)
+
+    * CMD Commands to check , have you installed right or Wrong 
+   ```
+   1. mongod --v 
+
+   output for right installation 
+
+   Build Info: {
+    "version": "7.0.0",
+    "gitVersion": "37d84072b5c5b9fd723db5fa133fb202ad2317f1",
+    "modules": [],
+    "allocator": "tcmalloc",
+    "environment": {
+        "distmod": "windows",
+        "distarch": "x86_64",
+        "target_arch": "x86_64"
+    }
+     }
+
+    check Mongo Shell 
+    cmd > mongosh 
+
+    show database
+    a. > show dbs
+    admin   40.00 KiB
+    config  72.00 KiB
+    local   72.00 KiB
+
+
+   ```
+
+---
+---
+---
+
+## Managing DataBase in MingoDb
+### Ceating /Deleting Database .
+### Ceating /Deleting Collections .
+
+
+```
+show dbs; 
+
+use <database-name>; (creating new databse)
+
+db.dropDatabase(); (to Delete Database)
+
+show collections;
+
+db.createCollection('<collection-name>');
+
+db<collection-name>.drop();
+
+```
+
+` start server by cmd (mongosh)   `
+
+`Note ->   You won't see a database listed in the output of the show dbs command untill that database contains at least one collection with data in it  `
+
+
+# CURD OPERATION IN MONGODB
+
+## Inserting document in mongodb 
+
+* Inserting Document in mongoDB.
+* When to use Quotes and when not to ?
+* Ordered and Unorderd Insertion.
+* Case Sensitivity in MongoDB.
+  
+```
+  SYNTAX for insert one data 
+
+  * db.<collection.name>.insertOne({
+   field:value1,
+   field:value2
+  ...
+  })
+
+  SYNTAX for insert Many data 
+
+  * db.<collection.name>.insertMany([{
+   field:value1,
+   field:value2
+  ...
+  },
+
+  {
+   field:value1,
+   field:value2
+  ...
+  }
+  //...
+  ]
+  )
+```
+   db.data.find() -> to show data inside inserted dataBase .
+
+
+# where should we useQuotes and not use ?. 
+
+
+   ` **Special Charater** [ If a field name contains character or spece ,or stars with a numeric digits, using quotes in necessary .]`
+
+
+```
+db.data.insertOne({'name':'rahul',age:19.6,address name:'ranchi'})
+
+SyntaxError: Unexpected token, expected "," (1:51)
+
+ db.data.insertOne({'name':'rahul',age:19.6,address name:'ranchi'}) 
+
+address name instead of this , do 'address name" single and then double quotes 
+```
+
+   ` **Reserved words**  -<> if a reserved keywords in MongoDB , use Quotes distiguish it from the reserved keywords .`
+
+---
+
+## Orderd and unorderd insertion 
+<p> When executing bulk write operations, "Orderd" and "unorderd " determine the batch behavious  </p>
+
+#### Orderd Inserts
+<p>Default behaviour is orderd where MongoDB stops on the first error .
+db.<collection-name>.insertMany([doc,doc2 ,...])
+
+` if somehow an error accured in doc2 or doc3 ,then before the doc2 or doc3 docs will be execute but after doc2-3 doesn't execute.`
+
+</p>
+
+#### Unorderd Inserts
+<p>When executing bulk write operation with unorderd flag . MongoDB processing after encountering an error.
+db.<collection-name>.insertMany([doc,doc2 ,...],{ordered : false});
+
+`if error accured all docs execute acept error docs.`
+</p>
+
+
+
+
+
+
