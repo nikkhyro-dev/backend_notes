@@ -5,8 +5,14 @@
 [ ] An uncompleted task
 [X] An uncompleted task
   > Blockquote
+
+ * /oneDrive/pictures/desktop/MongoDB <<<<<<<<<<<<<<<<<<<git path>>>>>>>>>>>>>>>>
+
+
           >> Nested Blockquote
 Markup : ![picture alt](http://via.placeholder.com/200x150 "Title is optional") -->
+
+
 
 ### Mongo DB Notes
 
@@ -192,13 +198,17 @@ hello\x00                  // field name
 ```
 show dbs; 
 
+show databases
+
 use <database-name>; (creating new databse)
 
 db.dropDatabase(); (to Delete Database)
 
 show collections;
 
-db.createCollection('<collection-name>');
+db represent current current database .
+
+db.createCollection('collection-name');
 
 db<collection-name>.drop();
 
@@ -285,8 +295,90 @@ db.<collection-name>.insertMany([doc,doc2 ,...],{ordered : false});
 `if error accured all docs execute acept error docs.`
 </p>
 
+# Read Operations in MongoDB
+
+ 1. Reading Documents in MongoDB.
+ 2. Comarison Operator.
+ 3. Logical Operators.
+ 4. Cursors in MongoDB.
+ 5. Elements Operators
+
+Finding Document in MongoDB
+
+```
+check for multiple properties and it gives all properties
+
+find()
+db.collection_name.find({key:value})
+
+check for multiple properties 
+
+findOne()
+db.collection_name.findOne({key:value})
+
+```
 
 
+# importing JSON in MongoDB commands .
+ 🍁these commands are used for to import json file in own database.
 
+```
+ 🍀 mongoimport.jsonfile.json -d database_name-c collection_name 
+ ```
 
+ ```
+ {
+  "name":"Rahul",
+  "age":20
+ }
+ {
+   "name":"abhi",
+  "age":23
+ }
+ ```
 
+``` 
+ 🍀 mongoimport products.json -d shop -c products.
+ 
+
+  🍀 mongoimport products json -d shop -c products ***--jsonArray*** .
+  
+  ```
+
+  ```
+  [{
+    "name":"rahul",
+    "age":19
+  },
+  {
+    "name":"kush",
+    "age":36
+  }
+  ]
+
+  use --json when you have data like array of an objects .
+
+  Limit to import of 16MB or smaller
+  ```
+# Export JSON
+
+```
+mongoExport -d shop -c sales -o E:/mongo/mongo/salestate.json 
+```
+
+# Comparison Operator 
+```
+$eq equals
+$ne 
+$gt
+$gte
+$lt
+$lte
+$in
+$nin
+
+```
+```
+db.collectionName.find('fieldName'{$operator:value })
+🍀db.collectionName.find('price'{$eq:699 })
+```
