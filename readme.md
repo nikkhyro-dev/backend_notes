@@ -122,6 +122,8 @@ MONOGODB store data in the form of document ( JSON ) it doesn't create any table
   4. ### How MongoDB Works 
    We have FrontEnd ,BackEnd and who Works on both called FullStack WebDevloper.
    IN Fronend (HTML ,CSS ,JAVASCRIPT ) and its framwork(REACJS , NEXTJS ... )   and Backend (NODEJS ,EXPRESSJS NEXTJS PYTHON etc..)  ` eg : user request some data form  web page , then frontend data goes to the backend and backend request data from the server like monoDB or SQL , these should to connect with any backend to acess data from the server .  `
+![MongoDb](https://github.com/nikkhyro-dev/backend_notes/blob/backend/Screenshot%202023-08-20%20085636.png)
 
   
+
    
