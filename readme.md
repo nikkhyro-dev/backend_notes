@@ -36,7 +36,7 @@ Markup : ![picture alt](http://via.placeholder.com/200x150 "Title is optional") 
 `Mongo DB was created by the company called 10gen , which is known as MongoDB ,.The company was founded by (Eliot Horowitz and Dwight Merriman ) in 2007 .The first version of Mongo Db Was released in 2009 . Mongo word was Extraced form Humongous `
 
  
- # 1 Chapter Introduction 
+ # 🌐 1 Chapter Introduction 
 
  1. what is MonoDB ? .
  MongoDB is a open-source , document-oriented NoSQL database managment system.
@@ -92,7 +92,7 @@ MONOGODB store data in the form of document ( JSON ) it doesn't create any table
 ]
 
 ```
- 3.  ### Key Feature of MongoDB .
+ 3.  ###🌐 Key Feature of MongoDB .
    
    * Flexibility Schema Design 
   
@@ -212,6 +212,8 @@ db.createCollection('collection-name');
 
 db<collection-name>.drop();
 
+
+
 ```
 
 ` start server by cmd (mongosh)   `
@@ -219,7 +221,7 @@ db<collection-name>.drop();
 `Note ->   You won't see a database listed in the output of the show dbs command untill that database contains at least one collection with data in it  `
 
 
-# CURD OPERATION IN MONGODB
+# 🌐CURD OPERATION IN MONGODB
 
 ## Inserting document in mongodb 
 
@@ -257,7 +259,7 @@ db<collection-name>.drop();
    db.data.find() -> to show data inside inserted dataBase .
 
 
-# where should we useQuotes and not use ?. 
+# 🌐where should we useQuotes and not use ?. 
 
 
    ` **Special Charater** [ If a field name contains character or spece ,or stars with a numeric digits, using quotes in necessary .]`
@@ -277,10 +279,10 @@ address name instead of this , do 'address name" single and then double quotes
 
 ---
 
-## Orderd and unorderd insertion 
+## 🌐Orderd and unorderd insertion 
 <p> When executing bulk write operations, "Orderd" and "unorderd " determine the batch behavious  </p>
 
-#### Orderd Inserts
+#### 🌐Orderd Inserts
 <p>Default behaviour is orderd where MongoDB stops on the first error .
 db.<collection-name>.insertMany([doc,doc2 ,...])
 
@@ -288,14 +290,14 @@ db.<collection-name>.insertMany([doc,doc2 ,...])
 
 </p>
 
-#### Unorderd Inserts
+#### 🌐Unorderd Inserts
 <p>When executing bulk write operation with unorderd flag . MongoDB processing after encountering an error.
 db.<collection-name>.insertMany([doc,doc2 ,...],{ordered : false});
 
 `if error accured then all docs execute accept error docs.`
 </p>
 
-# Read Operations in MongoDB
+# 🌐Read Operations in MongoDB
 
  1. Reading Documents in MongoDB.
  2. Comarison Operator.
@@ -319,7 +321,7 @@ db.collection_name.findOne({key:value})
 ```
 
 
-# importing JSON in MongoDB commands .
+# 🌐importing JSON in MongoDB commands .
  🍁these commands are used for to import json file in own database.
 
 ```
@@ -360,25 +362,321 @@ db.collection_name.findOne({key:value})
 
   Limit to import of 16MB or smaller
   ```
-# Export JSON
+# 🌐 Export JSON
 
 ```
+withot mongoshell start -> 
+
 mongoExport -d shop -c sales -o E:/mongo/mongo/salestate.json 
+
+mongoexport -d alreadyExist_Database -c collection_name filePath\filename
+
+eg  :  mongoexport -d ds -c col -o C:\Users\rahul\OneDrive\Pictures\Desktop\MongoDB\fol\products.json
+
+To look data of json file 
+ 1. Go to the databse .
+ 2. select that databse .
+ 3.insert this command .
+
+✅db.collections_name.find();
+
 ```
 
-# Comparison Operator 
+# 🌐 Comparison Operator 
 ```
-$eq equals
-$ne 
-$gt
-$gte
-$lt
-$lte
-$in
-$nin
+$eq (equals)
+$ne (not equals)
+$gt (greater than)
+$gte (greater than equal to)
+$lt (less than)
+$lte (less than equal to)
+
+$in ([123,21,34] give you only these three data ,depands how much you enterd in the array <$in as like come in for this data only .>)
+
+$nin (not in )[all data will execute acept arrays data ]
 
 ```
 ```
-db.collectionName.find('fieldName'{$operator:value })
-🍀db.collectionName.find('price'{$eq:699 })
+🍀 db.collectionName.find('fieldName'{$operator:value })
+
+✅db.collectionName.find({'price':{$eq:699 }})
+❌ db.collectionName.find('price'{$eq:699})
+
+
+
+
+
+🍀db.collectionName.find('price'{$eq:699 }).count() 
+
+
+🍀 db.category({price{$in:[249,129,39]}})
+
+```
+# 🌐 Introduction to cursor
+
+Cursors in MongoDB used to efficiently retrive large sets from quiers ,providing control over data retrival process .
+<br/>
+
+MongoDB retrives query result in batches using cursors . cursors are a pointer to the result set on the server . cursor are used to iterate through query result.
+
+<strong> Automatic Batching </strong> : MongoDb returuves query result in batches one .
+<br/>
+default batch is usually 101 document. this improves memory efficiency 
+
+# 🌐 cursor method
+
+```
+count() 
+limit()
+skip()
+sort()
+```
+
+```
+db.products.find({price:{$gt:250}}).count(); 
+
+db.products.find({price:{$gt:250}}).limit(5); 
+
+db.products.find({price:{$gt:250}}).skip(2); 
+
+db.products.find({price:{$gt:250}}).limit(2).sort({price:1});
+
+(1) for ascending and (-1) for descending  
+
+```
+db.products.find({price:{$gt:250}}).limit(5).skip(2); <br/>
+skip 2 in limit 5 
+
+# cursor method (caveats)
+***Performance Implications***  <br/>
+ 
+* skip()  can be inefficient for large offsets.
+* Using sort() on large result sets may impact performance .
+
+***Use with cautions***  <br/>
+* be cautious when using limit() and skip() on large collections.
+* Consider using indexing to optimize query performance .
+
+
+# logical Operators
+
+```
+1>> $and  : Performs a logical and operatio on an array of expression , where all expression must be true for the document to match.
+
+{$and[{condition1},{condition2},...]} ;
+
+$or
+
+$not
+
+{field : {$not:{operator:value}}} ;
+
+db.products.find({'price':{$not:{$eq:100}}}).count() both wrok same :
+db.products.find({'price':{$ne:100}}).count()
+
+ 😉 $nor  acept this condition execute all data.
+```
+```
+Q. Find products with price greater than 100 and name equal to "Diamond Ring"
+
+ db.products.find({$and:[{'price':{$gt:100}},{name:"Diamond Ring"}]})
+
+ db.products.find({$or:[{'price':{$gt:100}},{name:"Diamond Ring"}]})
+
+```
+
+# 🌍 Complex Expression 
+### This is basically use for complex  situation.
+
+<p>
+The $exper operator allow using aggregation expression within a query.
+Useful when you need to compare field from the same document in a more complex manner.
+Atleast we need to know syntax.
+
+Syntax:-
+```
+{$expr:{operator:{field,value}}}
+```
+
+$ is required 
+<br/>
+Example :-
+``` 
+db.products.find({$expr:{$gt:['$price',1340]}})
+
+db.collections_name.find({$expr :{$operator : [ {asmd_Operaitons:['$val1',$val2] },$comparable_value]}})
+
+shop> db.sales.find({$expr:{$gt: [ {$multiply : ['$quantity','$price']}, '$targetPrice']}   }  )
+ ```
+ for addition -> add
+<p/>
+
+# 🌍  Element Operator 
+
+```
+$exist , $type , $size
+
+```
+
+
+```
+
+{field:{$exist:<boolean>}}
+db.collections_name.find({price:{$exist:true}}).count()
+
+{field:{$type:"<bson-data-type>"}}
+
+{field:{$size:<array-length>}}
+
+```
+```
+The BSON value can be one of the following :
+
+1: Double
+2:String
+3:Object
+4:Array
+5:Binary data
+6:Undefined 
+7:Object id
+8:Boolean 
+9:Date 
+10:Null
+11: Regular expression
+12:Javascript code
+
+```
+
+`
+$size : the $size operator matches documents where the size of an array field matches a specified value.
+
+[{},
+{},
+{},
+[{},{},{}],
+{}
+]
+
+`
+
+db.collections_name.find({price:{$ exist:true},price:{$gt:1250}})
+<br/>
+is exists + is greater than 
+
+# 🌍 Projections (Important )
+<p>
+db.collections_name.find({},{field1:1,field2:1}). <br/>
+TO include specific field , use Projection with a value if a for the field you want. <br/>
+To exclude field , use projection with a value of 0 for the field you want to execute. <br/>
+You cannot include and exclude field simultaneously in the same query projections.
+<p/>
+
+# 🌍Embedded Documents 
+#### dealing with Arrays and object
+just use the dot notations.
+<p>
+Q 1: Find posts with comments by specific user (Array)  <br/>
+Q 2: Find the document where the view in metadata field > 1200.(Objects)  <br/>
+Q 3: we need to find out the document where the user in comments = henry and also in the  metadata likes value >50.  <br/>
+
+Q 4: we need to return an somments array which must have this
+(alice & vinod ) elements only in it . <br/>
+
+we need to use $all operator . here the order doesn't matter.
+
+### $all VS $ekemMatch
+
+🍀The $all operator selects the documents where the value of a field is an array that contains all the specified elements .
+
+🍃{ field: {$all:  [value1, value2,....] } }  
+
+🍀The $eleMatch operator matches documents that contain an array field with at least one element that matches all the specified query ceriteria.
+
+{field : {$eleMatch : {query1,query2, . . . . . . .} } } 
+
+ db.comments.find({'comments':{$elemMatch:{'user':'Vinod','text':'Thanks for sharing.'}}}) <br/>
+ * another way 
+    
+    * db.comments.find({"comments.user":"Alice","comments.text":"Awesome article"})
+
+```[
+  {},
+  {}
+ comments: [
+      { user: 'Alice', text: 'Awesome article!' },
+      { user: 'Vinod', text: 'Thanks for sharing.' }
+    ],
+    {}
+]
+
+if we need user and text both use elemMatch.
+another way to do  time stamp 2:24:00
+
+```
+<p/>
+
+# 🌍 Update Operations in MongoDB v.i.p
+1. updateOne() and updatemany().
+2. Removing and renaming fields.
+3. Adding,removing items from array.
+4. updating embedded documnets.
+   
+   ### 🌟updateOne() and updateMany()
+   db.collection_name.***updateOne***(
+    {filter},
+    {$set:{existingField:newValue,newField:new_value,//....}}
+
+   );
+
+   db.collectionName.***updateMany***(
+    {filter},
+    {$set;{existingField:new_Value,//...} }
+   )
+
+## 🌟Removing and Renaming Field (to change FieldValue )
+
+db.collection_name.updateOne({filter},{$unset:{fieldName}}); ==> ***for remove ***
+
+``` 
+eg:- db.products.updateMany({price: 899},{$unset:{'price':""}}) 
+
+```
+
+db.collections_name.updateMany({filter},{$rename:{oldFieldName:"newFieldName"}}); ==> ***rename***
+
+
+### 🌟 Updating ARRAY and Embedded Documents 
+
+🍀db.collections_name.updateOne(
+  {filter},
+  {$push:{arrayField:"new_value"}}
+);
+
+🍀db.collections_name.updateOne(
+  {filter},
+  {$pop:{arrayField:"value"}}
+);
+
+🍀db.collections_name.updateOne(
+  {filter},
+  {$set:{'arrayField. $ .txt': "update Txt"}}
+); --> $ positional operator 
+
+ db.comments.updateOne( {_id:4,'comments.user':"Alice"} , {$ set: {'comments.$.text':"Thankful! "} } )
+
+# 🌍 Delete Operations in MongoDB.
+In MongoDB , the delete Operations are used to remove documents from a collections . there are : 
+two main method to perform deletion : 
+
+```
+deleteOne() and deleteMany()
+```
+
+
+```
+db.colection_name.deleteOne({filter})
+
+db.collection_name.deleteMany({filter})
+
+eg:- db.sales.deleteMany({price:55});
 ```
