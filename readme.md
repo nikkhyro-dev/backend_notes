@@ -680,3 +680,211 @@ db.collection_name.deleteMany({filter})
 
 eg:- db.sales.deleteMany({price:55});
 ```
+
+# 🌍 Indexes in MongoDB.
+Q. What is Indexes.? <br/>
+Q. Benifits of Indexes !. <br/>
+Q. Managing Indexes .  <br/>
+Q. Unique , Text indexes . <br/>
+Q. When not to use Indexes ?
+
+### 🌟 What is Indexes ?.
+<p>
+Indexes are Specialized data structures that optimized data retrieval speed in MongoDB.  <br/>
+a. Indexes store a fractions of data in a more searchable formate. <br/>
+b. They enable MongoDB to locate data faster during queries. <br/>
+c. Indexes are separate form collections and multiple indexes can exist per collections. <br/>
+</p>
+
+## 🌟  Benifits of Indexes .
+
+1. Faster Querying : indexes drastically accelerate data retrival. particularly for large collections.
+2. Efficient Sorting : Indexes facilities rapid sorting based on specific field.
+3. Improved Aggregation : Aggregation operations become more efficient with optimized indixes.
+4. Indexes on Multiple Field : complex queries executed efficiently by utilizing multiple field in indexes.
+   
+   ### ✔️ explain();
+   <hr/>
+   use explain() method to understand query execution in detail.
+
+   db.products.find({name:'Air fryer'}).explain();
+
+    db.products.find({name:'Air fryer'}).explain("executionStats");
+            use it to measure the time taken to execute a query .
+   <hr/>
+
+   ## 🌟Managing Indexes ;
+   1. db.products.createindex({field:1});
+   
+       a. (1) for storing indexes in ascending order .
+
+       b. (-1) for storing indexes in Descending order .
+
+   2. db.collection.getindexes();
+   
+      a.  _id is a default index.
+
+REMOVING  
+
+   3. db.collection.dropIndex({field:1});
+   4.  db.collection.dropIndex('index_name')
+   
+
+    for check only  :-
+    db.products.getIndexes()
+
+## 🌟 Unique and Text Indexes . Homework 
+```
+db.products.createIndex({field:1},{unique:true})
+
+db.collectio.createIndex({field:"text});
+
+db.collection.find({$text:{$search:"keyword"}});
+
+  🍀Searching using index is faster than $regex searching .
+  🍀db.products.find({field:{$regex:"air"}})
+
+```
+### ✔️ When not to use index .
+
+```
+1. Indexes on Rarely Used Fields:
+. Indexing fields that are seldom used in quieries used in quieries can consume unnecessary space and resource.
+
+2. Balancing Act : 
+.indexing requires disk space and memory . Overindexing can lead a resource strain and impact overall performance .
+
+3. Indexing small Collections
+.In smaller collections, the cost of index maintainance might outWeigh the benifits gained from quering .
+```
+  
+#🌍 Aggregation
+
+Q. What is Aggregation ?
+
+🍀 Definition : Aggregation is the process of Performing transformations on documents and combining them to produce computed result.
+
+🍀Pipline stages : Aggregation consists of multiple pipleine stages ,each perfoming a specific operation on the input data.
+
+### 🍀🍀 BENIFITS
+
+🍀 Aggregating Data Complex calcuation and operations are possible.
+🍀 Advanced Transformations Data can be combined reshaped and computed for insights 
+🍀 Efficient Processing Aggregation handling large dataset efficiently .
+
+## 🌟 $match
+🍀 The $match stage is similar to the query used as the first argument in find(). it filters documents based on specified conditions.
+
+```
+Syntax :
+[{$match:{query}}]
+ 
+example : 
+db.products.aggregate([{$match:{ company: '64c23350e32f4a51b19b9231'}}]);
+
+```
+## 🌟 $group 
+#### ( work as  a javascript reduceMethod , which wrap up in a single quantity.)
+The $group stage group documents by specified field performs aggregation operations on grouped data .
+
+```
+
+{
+  $group:{
+    _id:expression, // grouped by
+
+  field1:{accumulator:expression},
+  ....
+  }
+}
+
+eg:
+db.products.aggregate([$group :{_id:{comp:"$company"},totalProducts:{$sum:1}}])
+
+$avg for average ,
+
+```
+
+
+<button style="padding:1rem; font-size:1rem; border-radius:1rem; cursor:pointer">[👆Visit Here To Know About $group](https://www.mongodb.com/docs/manual/reference/operator/aggregation/group/#mongodb-pipeline-pipe.-group) </button>
+```
+{
+  $group:
+    {
+      _id: <expression>, // Group key
+      <field1>: { <accumulator1> : <expression1> },
+      ...
+    }
+ }
+ 
+```
+EXAMPLES : -  
+```
+ db.products.aggregate([{$group:{_id:"$company",totalPrice:{$sum:"$price"}}}])
+```
+In Aggregate and expression $field is required.  
+This group products by company and calculates the total number of products for each company.
+
+
+Q. whose Price is > 900 
+Add with comparison operator
+
+```db.products.aggregate([
+
+  {$match:{price:{$gt:900}}},
+
+  {$group:{_id:"$company",totalPrice:{$sum:"$price"}}}
+
+  ])
+  ```
+
+
+  Q. Find the Quantity =5 ,group them with same quantity abd find the average price.
+  ```
+  db.sales.aggregate([{$match:{quantity: 5}},{$group:{_id:'$quantity:',totatalPrice:{$sum:'$price'},averagePrice:{$avg:'$price'}}}])
+  
+  ```
+## 🌟  sort()
+
+use multiple aggregation 
+```
+([
+  {$match:{}},
+
+{$group:{}},
+
+{$sort:{}}
+
+])
+```
+
+## 🌟 $sort:
+
+```
+
+ db.sales.aggregate([{$match:{price:{$gt:120}}},{$group:{_id:'$quantity:',totatalPrice:{$sum:'$price'}}},{$sort:{totalPrice:1}}])
+
+```
+
+## 🌟 $project
+this is alternate of projection But more advanced 
+
+🍀 The $Project stage reshapes documents,include or excludes fields and performs operation on field 
+
+{$project: {field1:expression,...}}
+
+```
+db.products.aggregate([
+
+
+{$project :{name:1},discountPrice:{'$subtract':{"$price",5}}}
+
+])
+
+```
+
+Projects the name field and calculates a discountedPrice field by substracting grom the price 
+$sum , $subtract , $multiply etc... are the type of expression Operator .
+
+
+
