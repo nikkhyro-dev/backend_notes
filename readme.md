@@ -974,3 +974,203 @@ db.products.aggregate([{$project:{name:1,numberOfColors:{$size:"$colors"}}}])
 ```
 
  🍀  Projects the name field and calculates the number of colors in the colors array .
+ 🍀 We cann't use size operator , because the $size operator is not allowed in directly within the $group stages . Instead of ,you can use it in combination with other aggregation operators or in seprate pipline.
+
+```
+db.products.aggregate([
+  {$match:{price:{$gt:1000}}},
+  {$unwind:"$colors"},
+  {$group:{_id:{priceGruup:"$price"},colors:{$addToSet:'$colors'}}},
+  {$project:{_id:1,colors:1,colorLength:{$size:"$colors"}}}]
+
+```
+## $limit and $skip
+
+🍀 The $limit $skip stages are useful for pagination,limit and skipping result.
+
+{$limit :positive_integer}
+
+```
+
+db.products.aggregate([{$skip:10},{$limit:10}])
+
+```
+in project stage we are only getting two field and the name of the field has to match with the field name in stage allcolors field
+
+```
+db.products.aggregate([
+  {$match:{price:{$gt:1000}}},
+  {$unwind:"$colors"},
+  {$group:{_id:{priceGruup:"$price"},colors:{$addToSet:'$colors'}}},
+  {$project:{_id:1,colors:1, allColor:1,colorLength:{$size:"$colors"}}},
+  {$limit:1}
+  ]
+)
+```
+
+# 🌟 filter
+
+🍀 The $filter stage filter of an array baed on specified conditions.
+
+```
+{
+$project:{
+field:{
+      $filter:{
+        input:'$array',
+        as :variable ,
+        cond:expression
+      }
+    }
+  }
+}
+```
+[kNOW MORE ABOUT FILTER STAGE](https://www.mongodb.com/docs/v7.0/reference/operator/aggregation/filter/)
+
+```
+db.sales.aggregate( [
+   {
+      $project: {
+         items: {
+            $filter: {
+               input: "$items",
+               as: "item",
+               cond: { $gte: [ "$$item.price", 100 ] }
+            }
+         }
+      }
+   }
+] )
+
+```
+we can change item name ,as:item use to reduce long ref name and that can be also change ;
+
+```
+ db.col.aggregate([{$project:{name:1,rahulVal:{$filter:{input:"$values",as:"val",cond:{$gt:['$$val',30]}}}}}])
+
+```
+---
+
+# 🌎 Introduction to MongoDB Atlas .
+
+🍀 MongoDB Atlas is MongoDB fully managed cloud database service.
+
+🍀 It offers an easy way to deploy ,manage , and scale MongoDB database in the cloud .
+
+🍀 Atlas eliminates the need for manual setup and maintain , allowing devlopers to focous on their applications .
+
+🍀 It provides automated scalling options to accommodate growing workloads.
+
+🍀Atlas support global clusters enabling to be deployed across multiple regions for better data aviliability and reduced latency.
+
+
+# 🔅 Atlas Setups 
+### [visit at Atlas](https://www.mongodb.com/atlas)
+
+For Reading Purpose
+
+🍀 In MongoDB a cluster refer to a group of interconnected server (nodes) that works together to store and mange data .
+
+---
+# MongoDB Driver 
+#### To comunicate with server . 
+
+Introuction to MongoDB Drivers .
+Working with Node.js MongoDB Drivers .
+
+## Introduction to MongoDB Driver .
+
+🍀Software libraries that allows applications to intract with mongoDB database.
+
+🍀 MongoDB offers official and community supported drivers for various programing languages.
+
+🍀 Drivers provides API's tailoard to specific programming languages .
+
+[Explore Drivers](https://www.mongodb.com/docs/drivers/)
+
+
+# 🌎 Getting started with Node.js MongoDB Driver.
+
+Download and install Nodejs from offical site .
+
+create a node.js projects using npm init -y .
+
+install mangodb driver using npm install mongodb.
+
+create a connection with MongoDB database and start working with it .
+
+ -----------
+1. connect to MongoDB server Use the **MongoClient** class and valid URI to establish a connection to the MongoDB server .
+2. Select a DataBase Access a specific database using the **client.db(databaseName)** method.
+3. Access a collection Retrieve a collection referance using
+ **db.collection(collectionName)** method.
+4. Perform Operations Perform CURD Operations like Querying , inserting ,updating and deleting documents within the collections
+5. close connection safely close the connection using the **client.close()**method when it done .
+
+#🌎 Getting Started with Node.js MongoDB Driver .
+
+1. it's Object Data modeling (ODM) and Node.js.
+2. it makes MongoDB ineraction more straightforword and organized.
+3. it provides a structure , schema-based data modeling approch.
+
+# 🌎 Mongoose 
+## 🌟 why Mongoose instead of offical driver.
+1. Structured schemas.
+2. validations .
+3. Relationships.
+4. Middleware
+5. complex Queries.
+   
+   install mongoose
+   ```
+   npm i mongoose 
+   ```
+
+```
+const mongoose  = reuire(id:"mongoose")
+const uri = 'mongoose'://127.0.0.1/shop;
+mongoose.connect(uri)
+
+// need to create schema.
+const productSchema = new mongoose.schemas({
+name:String,
+company:String,
+price:Number,
+colors:{Strings},
+image:String,
+category:String,
+isFeatured:Boolean
+});
+
+// need to create model
+//product should be singular after reching to dbs it will be plural
+
+const Prouct = new mongoose.model('Product',productSchema);
+
+
+
+const main = async() =>{
+try{
+
+//const data = await () : find(name:"Products",productSchema);
+//console.log(data)
+
+  // insert new data;
+ await Products.insertMany(data1)
+
+const data1= await Product.find({price:{$eq:1499}}}]) ;
+
+console.log(data1);
+
+}
+catch(error){
+console.log(error)
+}
+finally{
+  mongoose.connection.close()
+}
+
+}
+main();
+
+```
