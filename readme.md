@@ -10,7 +10,7 @@
 
 
           >> Nested Blockquote
-Markup : ![picture alt](http://via.placeholder.com/200x150 "Title is optional") -->
+Markup ![picture alt](http://via.placeholder.com/200x150 "Title is optional") -->
 
 
 
@@ -887,4 +887,90 @@ Projects the name field and calculates a discountedPrice field by substracting g
 $sum , $subtract , $multiply etc... are the type of expression Operator .
 
 
+## 🌍 $PSUH
+🍀 The $push stage adds elements to an array field within documents 
 
+🍀 {$push:expression }
+
+```
+🍀db.products.aggregate([{$group : {_id:{company:'$company'},products:{$Push :"$nmae"}}}])
+
+```
+## $push and $unwind 
+  
+  * Find documents with a price greater than 1200, then group them by price and create an array of colors for each group.
+
+  * Before 
+  
+      *  if price =1250 => colors ['#00000','#cc66000','#663300']
+  
+      *  if price =1250 => colors ['#000fff','#ddddd','#663300']
+  
+  * After , I need a new document where 
+    
+    {
+      price :1250,
+      allColors:[ '#00000', '#cc66000', '#663300', '#000fff', '#ddddd', '#663300' ]
+    };
+
+```
+db.products.aggregate([{$match :{price:{$lt:50}}},{$group:{_id:'$company',allColors:{$push:'colors'}}}])
+
+```
+To solve this [ [ ] ] array of an array 
+
+### $unwind 
+The $unwind stage deconstructs an array field and products multiple documents.
+
+🍀 {$unwind ,Array}
+
+```
+db.products.aggregate([
+  {$unwind:"$colors"},
+  {$group:{_id:{company :"$company"},products:{$push:"$colors"}}}
+])
+```
+deconstructs the colors array field ,group products by company and create an array of colors for company
+
+```
+db.products.aggregate([{$unwind:'$colors'},{$match:{price:{$eq:50}}},{$group:{_id:'$price',allColors:{$push:'$colors'}}}])
+
+```
+
+
+
+output:
+
+    allColors: [
+      '#023242', '#496a26',
+      '#4a4221', '#7c547f',
+      '#274d5a', '#47740c',
+      '#742e1a', '#524255',
+      '#604113', '#3d1957',
+      '#031136', '#44407f'
+    ]
+
+ gives output in a single array 
+ but have a problem it gives douplicate data also .
+
+## $ addToSet (it's a accumulator)
+
+The $addToSet satges adds elements to an array field while preventing duplicates.
+
+```
+
+db.products.aggregate([{$unwind:'$colors'},{$match:{price:{$eq:50}}},{$group:{_id:'$price',allColors:{$addToSet:'$colors'}}}])
+
+```
+Groups products by company and an array of unique colors for each company .
+
+## $size (accumulator)
+🍀 The $size stages calculates the length of an array field .
+
+🍀 {$size: array}
+
+```
+db.products.aggregate([{$project:{name:1,numberOfColors:{$size:"$colors"}}}])
+```
+
+ 🍀  Projects the name field and calculates the number of colors in the colors array .
