@@ -832,6 +832,9 @@ Syntax :
 example : 
 db.products.aggregate([{$match:{ company: '64c23350e32f4a51b19b9231'}}]);
 
+example :
+ db.products.aggregate([{$match:{price:{$gt:50}}}])
+
 ```
 ## 🌟 $group 
 #### ( work as  a javascript reduceMethod , which wrap up in a single quantity.)
