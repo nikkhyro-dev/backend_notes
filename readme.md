@@ -455,7 +455,7 @@ skip 2 in limit 5
 
 ***Use with cautions***  <br/>
 * be cautious when using limit() and skip() on large collections.
-* Consider using indexing to optimize query performance .
+* **Consider using indexing to optimize query performance .**
 
 
 # logical Operators
@@ -565,36 +565,86 @@ is exists + is greater than
 
 # 🌍 Projections (Important )
 <p>
-db.collections_name.find({},{field1:1,field2:1}). <br/>
+<br/>
+
 TO include specific field , use Projection with a value if a for the field you want. <br/>
+
 To exclude field , use projection with a value of 0 for the field you want to execute. <br/>
+
 You cannot include and exclude field simultaneously in the same query projections.
 <p/>
+
+```
+db.collections_name.find({},{field1:1,field2:1}). 
+
+ db.comments.find({'comments':{$size:2}},{comments:1,_id:0})
+
+// we want to show comments and author and want to hide _id .
+ db.comments.find({'comments':{$size:2}},{comments:1,author:1,_id:0})
+```
+BY THE PROJECTION WE CAN ONLY SEE ALL ***COMMENTS*** MEANS EMBEDDED ARRAY OR OBJECT.
+{comments:1} 1 means show 0 mean not show .
+
 
 # 🌍Embedded Documents 
 #### dealing with Arrays and object
 just use the dot notations.
 <p>
+
+```
+   db.collections_name.find({'parent.child': value})
+```
+
+
 Q 1: Find posts with comments by specific user (Array)  <br/>
 Q 2: Find the document where the view in metadata field > 1200.(Objects)  <br/>
+
+```
+db.comments.find({'metadata.views':{$gt:1200}}).limit(2)
+```
+
 Q 3: we need to find out the document where the user in comments = henry and also in the  metadata likes value >50.  <br/>
 
-Q 4: we need to return an somments array which must have this
+```
+db.comments.find({'comments.user':"Kevin",'metadata.views':{$gte:700}})
+
+```
+
+Q 4: we need to return an comments array which must have this
 (alice & vinod ) elements only in it . <br/>
+
+```
+
+ db.comments.find({'comments.user':'Vinod','comments.user':"Alice"})
+
+```
+
 
 we need to use $all operator . here the order doesn't matter.
 
-### $all VS $ekemMatch
+### $all VS $elemMatch
 
 🍀The $all operator selects the documents where the value of a field is an array that contains all the specified elements .
 
 🍃{ field: {$all:  [value1, value2,....] } }  
 
-🍀The $eleMatch operator matches documents that contain an array field with at least one element that matches all the specified query ceriteria.
+
 
 {field : {$eleMatch : {query1,query2, . . . . . . .} } } 
 
- db.comments.find({'comments':{$elemMatch:{'user':'Vinod','text':'Thanks for sharing.'}}}) <br/>
+```
+
+db.comments.find({'comments.user':{$all:["Alice","Vinod"]}})
+
+```
+🍀The $eleMatch operator matches documents that contain an array field with at least one element that matches all the specified query ceriteria.
+
+example : return those docs whose field is name and text ;
+
+``` 
+db.comments.find({'comments':{$elemMatch:{'user':'Vinod','text':'Thanks for sharing.'}}})
+
+``` 
  * another way 
     
     * db.comments.find({"comments.user":"Alice","comments.text":"Awesome article"})
