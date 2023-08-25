@@ -808,7 +808,7 @@ db.collection.find({$text:{$search:"keyword"}});
 .In smaller collections, the cost of index maintainance might outWeigh the benifits gained from quering .
 ```
   
-#🌍 Aggregation
+# 🌍 Aggregation
 
 Q. What is Aggregation ?
 
