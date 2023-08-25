@@ -14,7 +14,7 @@ Markup ![picture alt](http://via.placeholder.com/200x150 "Title is optional") --
 
 
 
-### Mongo DB Notes
+# 🙏 Mongo DB Notes
 
 #### Basic -> Introduction to MongoDB , NO SQL V/s SQL , JSON V/s BSON, Mnaging DB & Collections ,Advanced CRUD Operations, Comparioson Operator, Cursor in MongoDB , Logical Operators , Sexpr & Elements Operator , Projection & RelationShip Embedded Documents .
 
